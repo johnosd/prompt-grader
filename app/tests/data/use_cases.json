@@ -1,0 +1,11 @@
+[
+{
+        "id": 1,
+        "user_prompt": "Gere meu treino semanal de musculação",
+        "criteria": [
+            "Respondeu com um plano de treino semanal de musculação?",
+            "Cada treino tem um nome do execicio, número de séries, número de repetições e tempo de descanso?",
+            "cada execicio tem o kg recomendado para cada série?"
+        ]
+    }
+]

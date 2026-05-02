@@ -1,0 +1,29 @@
+ {
+  "id": 1,
+  "user_prompt": "Gere meu treino semanal de musculação",
+  "criteria": [
+    "Respondeu com um plano de treino semanal de musculação?",
+    "Cada treino tem um nome do execicio, número de séries, número de repetições e tempo de descanso?",
+    "cada execicio tem o kg recomendado para cada série?"
+  ],
+  "response": "# 📋 Treino Semanal de Musculação\n\n## **Dividido em 4 dias (Upper/Lower)**\n\n### **SEGUNDA - PEITO E TRÍCEPS**\n- Supino reto: 4x8-10\n- Supino inclinado: 3x8-10\n- Voador na máquina: 3x10-12\n- Tríceps corda: 3x10-12\n- Tríceps francês: 3x8-10\n- Rosca inversa: 2x12\n\n### **TERÇA - COSTAS E BÍCEPS**\n- Puxada frontal: 4x8-10\n- Remada curvada: 4x8-10\n- Remada máquina: 3x10-12\n- Rosca direta: 3x8-10\n- Rosca concentrada: 3x10-12\n- Puxada alta: 2x12\n\n### **QUARTA - Descanso ou Cardio Leve**\n\n### **QUINTA - OMBROS E PERNAS**\n- Desenvolvimento: 4x8-10\n- Elevação lateral: 3x10-12\n- Puxada alta frente: 3x10-12\n- Agachamento: 4x8-10\n- Leg press: 3x10-12\n- Cadeira extensora: 3x10-12\n- Rosca direta: 2x12\n\n### **SEXTA - PERNAS E POSTERIOR**\n- Leg press: 4x8-10\n- Cadeira extensora: 3x10-12\n- Mesa flexora: 3x10-12\n- Levantamento terra: 3x6-8\n- Leg curl: 3x10-12\n- Panturrilha: 3x12-15\n\n### **SÁBADO E DOMINGO** - Descanso\n\n---\n\n**Dicas importantes:**\n✅ Ajuste conforme sua experiência  \n✅ Aumente peso gradualmente  \n✅ Descanse 48h entre mesmo grupo muscular  \n✅ Durma bem e alimente-se adequadamente\n\nQuer ajustar algo? 💪",
+  "evaluation_prompt": "\n        Mensagem do cliente:\n        Gere meu treino semanal de musculação\n\n        Resposta do agente:\n        # 📋 Treino Semanal de Musculação\n\n## **Dividido em 4 dias (Upper/Lower)**\n\n### **SEGUNDA - PEITO E TRÍCEPS**\n- Supino reto: 4x8-10\n- Supino inclinado: 3x8-10\n- Voador na máquina: 3x10-12\n- Tríceps corda: 3x10-12\n- Tríceps francês: 3x8-10\n- Rosca inversa: 2x12\n\n### **TERÇA - COSTAS E BÍCEPS**\n- Puxada frontal: 4x8-10\n- Remada curvada: 4x8-10\n- Remada máquina: 3x10-12\n- Rosca direta: 3x8-10\n- Rosca concentrada: 3x10-12\n- Puxada alta: 2x12\n\n### **QUARTA - Descanso ou Cardio Leve**\n\n### **QUINTA - OMBROS E PERNAS**\n- Desenvolvimento: 4x8-10\n- Elevação lateral: 3x10-12\n- Puxada alta frente: 3x10-12\n- Agachamento: 4x8-10\n- Leg press: 3x10-12\n- Cadeira extensora: 3x10-12\n- Rosca direta: 2x12\n\n### **SEXTA - PERNAS E POSTERIOR**\n- Leg press: 4x8-10\n- Cadeira extensora: 3x10-12\n- Mesa flexora: 3x10-12\n- Levantamento terra: 3x6-8\n- Leg curl: 3x10-12\n- Panturrilha: 3x12-15\n\n### **SÁBADO E DOMINGO** - Descanso\n\n---\n\n**Dicas importantes:**\n✅ Ajuste conforme sua experiência  \n✅ Aumente peso gradualmente  \n✅ Descanse 48h entre mesmo grupo muscular  \n✅ Durma bem e alimente-se adequadamente\n\nQuer ajustar algo? 💪\n\n        Critérios de avaliação:\n        - Respondeu com um plano de treino semanal de musculação?\n- Cada treino tem um nome do execicio, número de séries, número de repetições e tempo de descanso?\n- cada execicio tem o kg recomendado para cada série?\n\n        Avalie cada critério individualmente e responda APENAS com JSON válido, sem texto adicional:\n            {\n            \"score\": <número de 0 a 10>,\n            \"criteria\": {\n                \"criterio_1\": {\"atende\": true, \"motivo\": \"...\"},\n                \"criterio_2\": {\"atende\": false, \"motivo\": \"...\"},\n                \"criterio_3\": {\"atende\": true, \"motivo\": \"...\"}\n            },\n            \"justification\": \"1-2 frases sobre o principal problema\"\n            }\n        ",
+  "evaluation": {
+    "score": 4,
+    "criteria": {
+      "criterio_1": {
+        "atende": true,
+        "motivo": "O agente gerou um plano de treino semanal de musculação dividido em 4 dias com estrutura clara e organizada."
+      },
+      "criterio_2": {
+        "atende": false,
+        "motivo": "Os exercícios possuem nome e número de séries e repetições, porém o tempo de descanso entre séries não foi informado em nenhum exercício."
+      },
+      "criterio_3": {
+        "atende": false,
+        "motivo": "Nenhum exercício apresenta o peso (kg) recomendado para cada série, o que é um critério essencial solicitado."
+      }
+    },
+    "justification": "O plano de treino atende parcialmente às expectativas, pois apresenta nome dos exercícios, séries e repetições, mas não inclui o tempo de descanso entre séries nem o peso recomendado (kg) para cada exercício, que são critérios fundamentais para um treino completo."
+  }
+}

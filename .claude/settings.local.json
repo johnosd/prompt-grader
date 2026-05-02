@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\johns\\\\Documents\\\\Projetos\\\\Claude Code Pratice\\\\claude_certified\\\\prompt-grader\\\\app\" -Recurse -Force | Where-Object { $_.Extension -in @\\('.py', '.md', '.txt', '.toml', '.ini', '.yml', '.yaml'\\) })",
+      "Bash(python -m pytest app/tests/test_evaluator.py -v -s)",
+      "PowerShell(cd \"c:\\\\Users\\\\johns\\\\Documents\\\\Projetos\\\\Claude Code Pratice\\\\claude_certified\\\\prompt-grader\"; Get-ChildItem -Name | Where-Object { $_ -match \"venv|env|\\\\.venv\" })",
+      "PowerShell(cd \"c:\\\\Users\\\\johns\\\\Documents\\\\Projetos\\\\Claude Code Pratice\\\\claude_certified\\\\prompt-grader\"; $env:PYTHONIOENCODING=\"utf-8\"; & .\\\\venv\\\\Scripts\\\\python.exe -m pytest app/tests/test_evaluator.py -v -s 2>&1)"
+    ]
+  }
+}

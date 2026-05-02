@@ -1,5 +1,22 @@
 {
   "prompt": "Gere meu treino semanal de musculação",
-  "response": "# 💪 Treino Semanal de Musculação\n\nAqui está um treino balanceado de 4 dias:\n\n## **SEGUNDA - Peito e Tríceps**\n- Supino reto: 4x8\n- Supino inclinado: 3x8\n- Crucifixo: 3x10\n- Rosca francesa: 3x10\n- Tríceps corda: 3x12\n\n## **TERÇA - Costas e Bíceps**\n- Barra fixa: 4x6-8\n- Remada curvada: 4x8\n- Remada máquina: 3x10\n- Rosca direta: 4x8\n- Rosca concentrada: 3x10\n\n## **QUARTA - Pernas**\n- Leg press: 4x8\n- Agachamento: 4x8\n- Extensora: 3x10\n- Cadeira flexora: 3x10\n- Panturrilha: 4x15\n\n## **QUINTA - Ombros e Acessórios**\n- Desenvolvimento: 4x8\n- Elevação lateral: 3x10\n- Remada alta: 3x10\n- Prancha: 3x30-45s\n\n---\n\n## ⚠️ **Dicas Importantes:**\n✅ Faça 5-10 min de aquecimento  \n✅ Descanse 48h entre grupos musculares  \n✅ Aumente o peso progressivamente  \n✅ Mantenha boa nutrição e sono  \n✅ Consulte um personal trainer para orientação\n\n**Qual é seu objetivo?** (ganho de massa, definição, força?) Posso ajustar! 🎯",
-  "evaluation": "CRITERIO_1: [ATENDE] - O agente gerou um plano de treino semanal de musculação completo com 4 dias de treino, divididos por grupos musculares.\nCRITERIO_2: [NAO_ATENDE] - Embora cada exercício tenha nome e séries/repetições, o tempo de descanso entre séries não foi informado em nenhum exercício.\nCRITERIO_3: [NAO_ATENDE] - Nenhum exercício apresenta o peso (kg) recomendado para cada série, sendo uma informação completamente ausente na resposta.\nSCORE: 5\nFEEDBACK_GERAL: O plano de treino atende ao básico de estrutura semanal com exercícios e séries/repetições, porém está incompleto por não incluir o tempo de descanso entre séries e os pesos recomendados (kg) para cada exercício, que são informações essenciais para a execução segura e eficiente do treino."
+  "response": "# 📋 Treino Semanal de Musculação\n\nVou criar um treino básico e equilibrado. Para personalizar melhor, me diga:\n- Seu nível: iniciante, intermediário ou avançado?\n- Tempo disponível por sessão?\n- Equipamento disponível?\n\n## ⬇️ Modelo Padrão (4 dias)\n\n### **SEGUNDA - Peito e Tríceps**\n- Supino reto (4x8-10)\n- Supino inclinado (3x10-12)\n- Voador (3x12-15)\n- Tríceps corda (3x12-15)\n- Mergulho assistido (3x8-10)\n\n### **TERÇA - Costas e Bíceps**\n- Barra fixa (4x8-10)\n- Rosca direta (4x10-12)\n- Remada baixa (3x10-12)\n- Rosca alternada (3x12-15)\n- Puxador frontal (3x12-15)\n\n### **QUARTA - Descanso ou Cardio**\n\n### **QUINTA - Ombros e Trapézio**\n- Desenvolvimento militar (4x8-10)\n- Rosca lateral (3x12-15)\n- Crucifixo inverso (3x12-15)\n- Encolhimento (3x12-15)\n\n### **SEXTA - Pernas**\n- Leg press (4x10-12)\n- Agachamento (4x8-10)\n- Extensora (3x12-15)\n- Leg curl (3x12-15)\n- Panturrilha (3x15-20)\n\n### **SÁBADO e DOMINGO - Descanso**\n\n---\n\n**💡 Dicas:**\n- ⏱️ Rest: 60-90s entre séries\n- 🔄 Mude exercícios a cada 4-6 semanas\n- 🥗 Combine com boa alimentação\n- 💪 Progressão gradual de peso\n\nQuer ajustes específicos?",
+  "evaluation": {
+    "score": 4,
+    "criteria": {
+      "criterio_1": {
+        "atende": true,
+        "motivo": "O agente respondeu com um plano de treino semanal de musculação completo, dividido em 4 dias com grupos musculares específicos."
+      },
+      "criterio_2": {
+        "atende": false,
+        "motivo": "Os exercícios têm nome, número de séries e repetições, porém o tempo de descanso é fornecido de forma genérica nas dicas (60-90s) e não especificado individualmente para cada exercício."
+      },
+      "criterio_3": {
+        "atende": false,
+        "motivo": "Nenhum exercício possui o kg recomendado para cada série. O agente apenas menciona 'progressão gradual de peso' nas dicas, sem fornecer valores específicos de carga."
+      }
+    },
+    "justification": "O plano de treino é estruturado e cobre os dias da semana, mas falta informações essenciais solicitadas nos critérios: o tempo de descanso não é individualizado por exercício e nenhum peso em kg é recomendado para as séries."
+  }
 }
