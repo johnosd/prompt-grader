@@ -65,7 +65,7 @@ class Grader:
             if score >= threshold_score:
                 break
 
-            # system_prompt = use_json["improved_prompt"]
-            use_json["user_prompt"] = use_json["improved_prompt"]
+            system_prompt = use_json["improved_prompt"]
+            #use_json["user_prompt"] = use_json["improved_prompt"]
 
         return historico
