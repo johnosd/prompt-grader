@@ -1,33 +1,47 @@
 # Prompt Grader
 
-An agentic pipeline that automatically improves an AI agent's system prompt through iterative evaluation cycles, until the responses meet a defined quality threshold.
+An agentic pipeline that automatically improves a user prompt through iterative evaluation cycles, until the model's response meets a defined quality threshold.
+
+## What is prompt evaluation?
+
+Prompt evaluation (or **grading**) is the practice of automatically measuring how well a model response satisfies a set of criteria — and using that signal to improve the prompt that generated it.
+
+Claude is well-suited for this because the same model that generates responses can also act as a judge: given a response and a rubric, it returns a structured score and diagnosis. Anthropic's documentation refers to this pattern as [using Claude to evaluate Claude outputs](https://docs.anthropic.com/en/docs/build-with-claude/evaluate-prompts), and it is a core building block for prompt engineering workflows, regression testing, and autonomous agents that self-improve.
+
+This project applies that pattern in a loop: evaluate → diagnose → rewrite → repeat.
 
 ## How it works
 
-Each iteration runs three steps:
-
-1. **Execute** — sends the user message to a Claude agent using the current system prompt
-2. **Evaluate** — scores the response (0–10) against user-defined criteria
-3. **Improve** — rewrites the system prompt based on the evaluation feedback
-
-The loop repeats until the score reaches the threshold or the maximum number of iterations is hit.
+The key design decision is that the **system prompt stays fixed** across iterations. What changes is the **user prompt** — the Improver rewrites it to be more explicit, structured, and constraint-rich so that the same agent produces better responses without modifying its core instructions.
 
 ```
-user_message + system_prompt
-        │
-        ▼
-  executor.py ──► model response
-        │
-        ▼
-  evaluator.py ──► { score, criteria, justification }
-        │
-        ▼
-  improver.py ──► improved_system_prompt
-        │
-        └──► repeat until score >= threshold or max_iterations reached
+user_prompt (evolves each iteration)
+      │
+      ▼
+  Executor ── system_prompt (fixed)
+      │
+      ▼
+  Evaluator ── score + diagnosis JSON
+      │           { score, criteria: { atende, motivo }, justification }
+      ▼
+  Improver ── generates improved user_prompt
+      │
+      └──► repeat until score >= threshold or max_iterations reached
 ```
 
-## Setup
+Each iteration:
+
+1. **Execute** — sends the current `user_prompt` to a Claude agent with a fixed `system_prompt`; captures the text response
+2. **Evaluate** — a second Claude call scores the response (0–10) against each user-defined criterion and returns a JSON diagnosis
+3. **Improve** — a third Claude call reads the diagnosis and rewrites the `user_prompt` to directly address every failing criterion; the improved prompt becomes the input for the next iteration
+
+## Live demo
+
+[https://prompt-grader.streamlit.app/](https://prompt-grader.streamlit.app/)
+
+Enter your Anthropic API key directly in the UI — no setup required.
+
+## Setup (local)
 
 **Requirements:** Python 3.10+, an Anthropic API key.
 
@@ -48,6 +62,13 @@ streamlit run app/streamlit_app.py
 ```
 
 Fill in the user message, one evaluation criterion per line, and the number of iterations. Click **Rodar Grader** to start.
+
+### Deploy on Streamlit Community Cloud
+
+1. Fork or push this repo to GitHub.
+2. Go to [share.streamlit.io](https://share.streamlit.io) and click **New app**.
+3. Select the repository and set the main file path to `app/streamlit_app.py`.
+4. Click **Deploy** — no secrets configuration needed, the app asks for the API key at runtime.
 
 ### Python API
 

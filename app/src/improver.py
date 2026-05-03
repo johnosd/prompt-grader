@@ -85,7 +85,7 @@ class Improver:
         user_prompt, feedbacks, problems, justification, score = self.get_feedback(use_json)
 
         # 2. Construir um prompt de melhoria com base nos problemas identificados
-        improved_prompt = self.build_improvement_prompt(
+        instruction_prompt  = self.build_improvement_prompt(
              feedbacks, 
              problems, 
              justification, 
@@ -94,24 +94,21 @@ class Improver:
              system_prompt
              )
 
-        # 3. Gerar um novo prompt melhorado usando o modelo de linguagem
+        # 3. Chamar o LLM para gerar o novo system prompt
         executor = Executor(self.api_key)
         messages = []
-        executor.add_user_message(messages, user_prompt)
+        executor.add_user_message(messages, instruction_prompt)
 
-        improved_response = executor.execute_prompt(
-            messages, 
-            system_prompt=improved_prompt, 
+        response = executor.execute_prompt(
+            messages,
+            system_prompt=self.system_prompt,
             model=self.model
-            )
-        
+        )
 
-        improved_system_prompt = improved_response.content[0].text.strip()
+        improved_system_prompt = response.content[0].text.strip()
         use_json["improved_prompt"] = improved_system_prompt
-
-        improved_json = use_json
-
-        return improved_json
+        
+        return use_json
 
 
 

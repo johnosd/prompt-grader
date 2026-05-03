@@ -41,7 +41,7 @@ class Grader:
             self,
             use_json: dict,
             threshold_score: int = 8,
-            max_iterations: int = 3
+            max_iterations: int = 2
     ) -> list:
 
         system_prompt = SYSTEM_PROMPT
@@ -65,6 +65,7 @@ class Grader:
             if score >= threshold_score:
                 break
 
-            system_prompt = use_json["improved_prompt"]
+            # system_prompt = use_json["improved_prompt"]
+            use_json["user_prompt"] = use_json["improved_prompt"]
 
         return historico

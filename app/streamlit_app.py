@@ -8,7 +8,8 @@ st.title("🎯 Prompt Grader")
 api_key = st.text_input(
     "🔑 Sua Anthropic API Key",
     type="password",
-    placeholder="sk-ant-..."
+    placeholder="sk-ant-...",
+    help="Sua chave é usada apenas nesta sessão para chamar a API do Claude. Ela nunca é salva, logada ou compartilhada. O código é open source — você pode auditar em github.com/johncosta/prompt-grader. Prefere rodar localmente? Veja o README."
 )
 
 user_message = st.text_area(

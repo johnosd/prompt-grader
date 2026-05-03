@@ -129,3 +129,14 @@ compiled/
 
 # Cython debug symbols
 cython_debug/
+
+# IDEs
+.vscode/
+.idea/
+
+# Streamlit
+.streamlit/secrets.toml
+
+# OS
+.DS_Store
+Thumbs.db
