@@ -37,7 +37,7 @@ if rodar:
     }
 
     with st.spinner("Rodando Grader..."):
-        grader = Grader()
+        grader = Grader(api_key=api_key)
         historico = grader.run_grader(use_json, max_iterations=max_iterations)
 
     st.success(f"Concluído em {len(historico)} iteração(ões)")

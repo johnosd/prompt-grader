@@ -10,9 +10,10 @@ SYSTEM_PROMPT = """
         Retorne APENAS JSON válido. Não use markdown, não use blocos de código, não adicione texto antes ou depois do JSON.
     """
 class Evaluator:
-    def __init__(self):
+    def __init__(self, api_key: str = None):
         self.system_prompt = SYSTEM_PROMPT
         self.model = "claude-sonnet-4-6"
+        self.api_key = api_key
         
 
     def build_evaluation_prompt(
@@ -59,7 +60,7 @@ class Evaluator:
             criteria
             )
         
-        executor = Executor()
+        executor = Executor(self.api_key)
         messages = []
         executor.add_user_message(messages, prompt_evaluation)
         evaluation = executor.execute_prompt(

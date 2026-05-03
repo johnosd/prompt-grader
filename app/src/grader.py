@@ -28,11 +28,11 @@ class Grader:
         use_json["response"] = response.content[0].text.strip()
 
         # 2. Avaliar a resposta
-        evaluator = Evaluator()
+        evaluator = Evaluator(api_key=self.api_key)
         use_json = evaluator.evaluate_response(use_json)
 
         # 3. Melhorar o system prompt
-        improver = Improver()
+        improver = Improver(api_key=self.api_key)
         use_json = improver.improve_prompt(use_json)
 
         return use_json

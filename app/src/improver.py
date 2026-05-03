@@ -5,9 +5,10 @@ SYSTEM_PROMPT = """Você é um especialista em prompt engineering.
     """
 class Improver:
 
-    def __init__(self):
+    def __init__(self, api_key: str = None):
         self.system_prompt = SYSTEM_PROMPT
         self.model = "claude-sonnet-4-6"
+        self.api_key = api_key
 
     def get_feedback(
             self, 
@@ -94,7 +95,7 @@ class Improver:
              )
 
         # 3. Gerar um novo prompt melhorado usando o modelo de linguagem
-        executor = Executor()
+        executor = Executor(self.api_key)
         messages = []
         executor.add_user_message(messages, user_prompt)
 
