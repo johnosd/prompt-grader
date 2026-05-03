@@ -2,12 +2,13 @@ from src.executor import Executor
 from src.evaluator import Evaluator
 from src.improver import Improver
 
-SYSTEM_PROMPT = "Você é um assistente que responde perguntas de forma clara e objetiva."
+SYSTEM_PROMPT = "Você é um assistente que responde perguntas de forma clara e objetiva sem perguntar"
 
 class Grader:
-    def __init__(self):
+    def __init__(self, api_key: str = None):
         self.system_prompt = SYSTEM_PROMPT
         self.model = "claude-sonnet-4-6"
+        self.api_key = api_key
 
     def grader(
             self,
@@ -15,7 +16,7 @@ class Grader:
             system_prompt: str = SYSTEM_PROMPT
     ) -> tuple:
         messages = []
-        executor = Executor()
+        executor = Executor(api_key=self.api_key)
         executor.add_user_message(messages, use_json["user_prompt"])
 
         # 1. Executar o prompt
@@ -57,6 +58,7 @@ class Grader:
                 "resposta": use_json["response"],
                 "score": score,
                 "system_prompt_melhorado": use_json.get("improved_prompt"),
+                "evaluation": use_json.get("evaluation"),
                 "resposta_melhorada": use_json.get("improved_response"),
             })
 

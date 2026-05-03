@@ -6,7 +6,7 @@ SYSTEM_PROMPT = """Você é um especialista em prompt engineering.
 class Improver:
 
     def __init__(self):
-        self.system_prompt = SYSTEM_PROMPT,
+        self.system_prompt = SYSTEM_PROMPT
         self.model = "claude-sonnet-4-6"
 
     def get_feedback(
@@ -103,9 +103,11 @@ class Improver:
             system_prompt=improved_prompt, 
             model=self.model
             )
+        
 
-        use_json["improved_prompt"] = improved_prompt
-        use_json["improved_response"] = improved_response.content[0].text.strip()
+        improved_system_prompt = improved_response.content[0].text.strip()
+        use_json["improved_prompt"] = improved_system_prompt
+
         improved_json = use_json
 
         return improved_json

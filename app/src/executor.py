@@ -10,6 +10,10 @@ SYSTEM_PROMPT = """Você é um agente reponsavel por executar prompts de acordo 
 
 class Executor:
 
+    def __init__(self, api_key: str = None):
+        self.client = anthropic.Anthropic(api_key=api_key)
+
+
     def add_user_message(self, messages, text):
         user_message = {"role": "user", "content": text}
         messages.append(user_message)
@@ -36,5 +40,5 @@ class Executor:
             params["system"] = system_prompt
 
         # chamar a API do Claude e retorna apenas texto'
-        response = client.messages.create(**params)
+        response = self.client.messages.create(**params)
         return response
