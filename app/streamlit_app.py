@@ -64,14 +64,8 @@ if st.button("💬 Gerar Perguntas"):
         st.error("Digite um prompt antes de gerar perguntas.")
         st.stop()
 
-    if provider == "bedrock":
-        import os
-        os.environ["AWS_ACCESS_KEY_ID"] = aws_access_key
-        os.environ["AWS_SECRET_ACCESS_KEY"] = aws_secret_key
-        os.environ["AWS_DEFAULT_REGION"] = aws_region or "us-east-1"
-
     with st.spinner("Gerando perguntas..."):
-        interviewer = Interviewer(api_key=api_key, provider=provider)
+        interviewer = Interviewer(api_key=api_key, provider=provider, aws_access_key=aws_access_key, aws_secret_key=aws_secret_key, aws_region=aws_region)
         st.session_state.questions = interviewer.generate_questions(user_message, depth=depth)
 
 # --- STEP 2: RESPONDER PERGUNTAS ---
@@ -94,12 +88,6 @@ if st.session_state.get("questions"):
             st.error("Insira as credenciais AWS para continuar.")
             st.stop()
 
-        if provider == "bedrock":
-            import os
-            os.environ["AWS_ACCESS_KEY_ID"] = aws_access_key
-            os.environ["AWS_SECRET_ACCESS_KEY"] = aws_secret_key
-            os.environ["AWS_DEFAULT_REGION"] = aws_region or "us-east-1"
-
         criterios = [c.strip() for c in criterios_text.split("\n") if c.strip()]
         enriched_prompt = build_context(user_message, answers)
 
@@ -108,7 +96,7 @@ if st.session_state.get("questions"):
             "criteria": criterios
         }
 
-        grader = Grader(api_key=api_key, provider=provider)
+        grader = Grader(api_key=api_key, provider=provider, aws_access_key=aws_access_key, aws_secret_key=aws_secret_key, aws_region=aws_region)
         historico = []
         status = st.empty()
         status.info("⏳ Rodando iteração 1...")

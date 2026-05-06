@@ -19,11 +19,14 @@ Formato esperado:
 
 
 class Interviewer:
-    def __init__(self, api_key: str = None, provider: str = "anthropic"):
+    def __init__(self, api_key: str = None, provider: str = "anthropic", aws_access_key: str = None, aws_secret_key: str = None, aws_region: str = None):
         self.system_prompt = SYSTEM_PROMPT
         self.model = "claude-haiku-4-5-20251001"
         self.api_key = api_key
         self.provider = provider
+        self.aws_access_key = aws_access_key
+        self.aws_secret_key = aws_secret_key
+        self.aws_region = aws_region
 
     def generate_questions(self, user_prompt: str, depth: str = "medium") -> list[str]:
         if depth not in ("minimal", "medium", "maximum"):
@@ -31,7 +34,7 @@ class Interviewer:
 
         user_message = f"Nível de profundidade: {depth}\n\nPrompt do usuário:\n{user_prompt}"
 
-        executor = Executor(self.api_key, provider=self.provider)
+        executor = Executor(self.api_key, provider=self.provider, aws_access_key=self.aws_access_key, aws_secret_key=self.aws_secret_key, aws_region=self.aws_region)
         messages = []
         executor.add_user_message(messages, user_message)
 

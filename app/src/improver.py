@@ -5,11 +5,14 @@ SYSTEM_PROMPT = """Você é um especialista em prompt engineering.
     """
 class Improver:
 
-    def __init__(self, api_key: str = None, provider: str = "anthropic"):
+    def __init__(self, api_key: str = None, provider: str = "anthropic", aws_access_key: str = None, aws_secret_key: str = None, aws_region: str = None):
         self.system_prompt = SYSTEM_PROMPT
         self.model = "claude-sonnet-4-6"
         self.api_key = api_key
         self.provider = provider
+        self.aws_access_key = aws_access_key
+        self.aws_secret_key = aws_secret_key
+        self.aws_region = aws_region
 
     def get_feedback(
             self, 
@@ -96,7 +99,7 @@ class Improver:
              )
 
         # 3. Chamar o LLM para gerar o novo system prompt
-        executor = Executor(self.api_key, provider=self.provider)
+        executor = Executor(self.api_key, provider=self.provider, aws_access_key=self.aws_access_key, aws_secret_key=self.aws_secret_key, aws_region=self.aws_region)
         messages = []
         executor.add_user_message(messages, instruction_prompt)
 

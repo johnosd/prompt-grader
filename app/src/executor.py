@@ -14,10 +14,21 @@ BEDROCK_MODEL_MAP = {
 
 class Executor:
 
-    def __init__(self, api_key: str = None, provider: str = "anthropic"):
+    def __init__(
+            self,
+            api_key: str = None,
+            provider: str = "anthropic",
+            aws_access_key: str = None,
+            aws_secret_key: str = None,
+            aws_region: str = None,
+    ):
         self.provider = provider
         if provider == "bedrock":
-            self.client = anthropic.AnthropicBedrock()
+            self.client = anthropic.AnthropicBedrock(
+                aws_access_key=aws_access_key,
+                aws_secret_key=aws_secret_key,
+                aws_region=aws_region,
+            )
         else:
             self.client = anthropic.Anthropic(api_key=api_key)
 
