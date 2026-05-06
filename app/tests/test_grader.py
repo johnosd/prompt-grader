@@ -11,7 +11,12 @@ def test_run_grader():
     use_json = copy.deepcopy(use_cases[0])
 
     grader = Grader()
-    historico = grader.run_grader(use_json, threshold_score=8, max_iterations=3)
+    historico = []
+
+    for entry in grader.run_grader(use_json, threshold_score=8, max_iterations=3):
+        historico.append(entry)
+        print(f"\n--- Iteração {entry['iteracao']} | Score: {entry['score']} ---")
+        print(json.dumps(entry, indent=2, ensure_ascii=False))
 
     resultado = {
         "user_prompt": use_json["user_prompt"],

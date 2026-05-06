@@ -42,17 +42,15 @@ class Grader:
             use_json: dict,
             threshold_score: int = 8,
             max_iterations: int = 2
-    ) -> list:
-
+    ):
         system_prompt = SYSTEM_PROMPT
-        historico = []
 
         for iteration in range(1, max_iterations + 1):
             use_json = self.grader(use_json, system_prompt)
 
             score = use_json["evaluation"]["score"]
 
-            historico.append({
+            entry = {
                 "iteracao": iteration,
                 "system_prompt": system_prompt,
                 "resposta": use_json["response"],
@@ -60,12 +58,11 @@ class Grader:
                 "system_prompt_melhorado": use_json.get("improved_prompt"),
                 "evaluation": use_json.get("evaluation"),
                 "resposta_melhorada": use_json.get("improved_response"),
-            })
+            }
+
+            yield entry
 
             if score >= threshold_score:
                 break
 
             system_prompt = use_json["improved_prompt"]
-            #use_json["user_prompt"] = use_json["improved_prompt"]
-
-        return historico
