@@ -5,10 +5,11 @@ SYSTEM_PROMPT = """Você é um especialista em prompt engineering.
     """
 class Improver:
 
-    def __init__(self, api_key: str = None):
+    def __init__(self, api_key: str = None, provider: str = "anthropic"):
         self.system_prompt = SYSTEM_PROMPT
         self.model = "claude-sonnet-4-6"
         self.api_key = api_key
+        self.provider = provider
 
     def get_feedback(
             self, 
@@ -95,7 +96,7 @@ class Improver:
              )
 
         # 3. Chamar o LLM para gerar o novo system prompt
-        executor = Executor(self.api_key)
+        executor = Executor(self.api_key, provider=self.provider)
         messages = []
         executor.add_user_message(messages, instruction_prompt)
 

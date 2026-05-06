@@ -7,12 +7,29 @@ st.title("🎯 Prompt Grader")
 
 # --- INPUTS ---
 
-api_key = st.text_input(
-    "🔑 Sua Anthropic API Key",
-    type="password",
-    placeholder="sk-ant-...",
-    help="Sua chave é usada apenas nesta sessão para chamar a API do Claude. Ela nunca é salva, logada ou compartilhada."
+provider = st.selectbox(
+    "Provider",
+    options=["anthropic", "bedrock"],
+    format_func=lambda x: "Anthropic" if x == "anthropic" else "AWS Bedrock"
 )
+
+if provider == "anthropic":
+    api_key = st.text_input(
+        "🔑 Anthropic API Key",
+        type="password",
+        placeholder="sk-ant-...",
+        help="Usada apenas nesta sessão. Nunca é salva ou compartilhada."
+    )
+    aws_access_key = aws_secret_key = aws_region = None
+else:
+    api_key = None
+    col_aws1, col_aws2, col_aws3 = st.columns(3)
+    with col_aws1:
+        aws_access_key = st.text_input("AWS Access Key ID", type="password")
+    with col_aws2:
+        aws_secret_key = st.text_input("AWS Secret Access Key", type="password")
+    with col_aws3:
+        aws_region = st.text_input("Região", value="us-east-1")
 
 user_message = st.text_area(
     "User Message",
@@ -37,15 +54,24 @@ with col2:
 # --- STEP 1: GERAR PERGUNTAS ---
 
 if st.button("💬 Gerar Perguntas"):
-    if not api_key:
+    if provider == "anthropic" and not api_key:
         st.error("Insira sua Anthropic API Key para continuar.")
+        st.stop()
+    if provider == "bedrock" and not (aws_access_key and aws_secret_key):
+        st.error("Insira as credenciais AWS para continuar.")
         st.stop()
     if not user_message.strip():
         st.error("Digite um prompt antes de gerar perguntas.")
         st.stop()
 
+    if provider == "bedrock":
+        import os
+        os.environ["AWS_ACCESS_KEY_ID"] = aws_access_key
+        os.environ["AWS_SECRET_ACCESS_KEY"] = aws_secret_key
+        os.environ["AWS_DEFAULT_REGION"] = aws_region or "us-east-1"
+
     with st.spinner("Gerando perguntas..."):
-        interviewer = Interviewer(api_key=api_key)
+        interviewer = Interviewer(api_key=api_key, provider=provider)
         st.session_state.questions = interviewer.generate_questions(user_message, depth=depth)
 
 # --- STEP 2: RESPONDER PERGUNTAS ---
@@ -61,9 +87,18 @@ if st.session_state.get("questions"):
     # --- STEP 3: RODAR GRADER ---
 
     if st.button("▶ Rodar Grader"):
-        if not api_key:
+        if provider == "anthropic" and not api_key:
             st.error("Insira sua Anthropic API Key para continuar.")
             st.stop()
+        if provider == "bedrock" and not (aws_access_key and aws_secret_key):
+            st.error("Insira as credenciais AWS para continuar.")
+            st.stop()
+
+        if provider == "bedrock":
+            import os
+            os.environ["AWS_ACCESS_KEY_ID"] = aws_access_key
+            os.environ["AWS_SECRET_ACCESS_KEY"] = aws_secret_key
+            os.environ["AWS_DEFAULT_REGION"] = aws_region or "us-east-1"
 
         criterios = [c.strip() for c in criterios_text.split("\n") if c.strip()]
         enriched_prompt = build_context(user_message, answers)
@@ -73,7 +108,7 @@ if st.session_state.get("questions"):
             "criteria": criterios
         }
 
-        grader = Grader(api_key=api_key)
+        grader = Grader(api_key=api_key, provider=provider)
         historico = []
         status = st.empty()
         status.info("⏳ Rodando iteração 1...")

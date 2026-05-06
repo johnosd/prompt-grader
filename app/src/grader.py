@@ -5,10 +5,11 @@ from src.improver import Improver
 SYSTEM_PROMPT = "Você é um assistente que responde perguntas de forma clara e objetiva sem perguntar"
 
 class Grader:
-    def __init__(self, api_key: str = None):
+    def __init__(self, api_key: str = None, provider: str = "anthropic"):
         self.system_prompt = SYSTEM_PROMPT
         self.model = "claude-sonnet-4-6"
         self.api_key = api_key
+        self.provider = provider
 
     def grader(
             self,
@@ -16,7 +17,7 @@ class Grader:
             system_prompt: str = SYSTEM_PROMPT
     ) -> tuple:
         messages = []
-        executor = Executor(api_key=self.api_key)
+        executor = Executor(api_key=self.api_key, provider=self.provider)
         executor.add_user_message(messages, use_json["user_prompt"])
 
         # 1. Executar o prompt
@@ -28,11 +29,11 @@ class Grader:
         use_json["response"] = response.content[0].text.strip()
 
         # 2. Avaliar a resposta
-        evaluator = Evaluator(api_key=self.api_key)
+        evaluator = Evaluator(api_key=self.api_key, provider=self.provider)
         use_json = evaluator.evaluate_response(use_json)
 
         # 3. Melhorar o system prompt
-        improver = Improver(api_key=self.api_key)
+        improver = Improver(api_key=self.api_key, provider=self.provider)
         use_json = improver.improve_prompt(use_json)
 
         return use_json

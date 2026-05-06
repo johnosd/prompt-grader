@@ -1,35 +1,42 @@
-import json
 import anthropic
 import os
 from dotenv import load_dotenv
 
 load_dotenv()
-client = anthropic.Anthropic()
 
-SYSTEM_PROMPT = """Você é um agente reponsavel por executar prompts de acordo com as instruções do usuário."""
+SYSTEM_PROMPT = """Você é um agente responsável por executar prompts de acordo com as instruções do usuário."""
+
+BEDROCK_MODEL_MAP = {
+    "claude-haiku-4-5-20251001": "anthropic.claude-haiku-4-5-20251001-v1:0",
+    "claude-sonnet-4-6": "anthropic.claude-sonnet-4-6-20250919-v1:0",
+    "claude-opus-4-7": "anthropic.claude-opus-4-7-20250514-v1:0",
+}
 
 class Executor:
 
-    def __init__(self, api_key: str = None):
-        self.client = anthropic.Anthropic(api_key=api_key)
-
+    def __init__(self, api_key: str = None, provider: str = "anthropic"):
+        self.provider = provider
+        if provider == "bedrock":
+            self.client = anthropic.AnthropicBedrock()
+        else:
+            self.client = anthropic.Anthropic(api_key=api_key)
 
     def add_user_message(self, messages, text):
-        user_message = {"role": "user", "content": text}
-        messages.append(user_message)
+        messages.append({"role": "user", "content": text})
 
     def add_assistant_message(self, messages, text):
-        assistant_message = {"role": "assistant", "content": text}
-        messages.append(assistant_message)
+        messages.append({"role": "assistant", "content": text})
 
     def execute_prompt(
             self,
             messages,
-            system_prompt: str=None,
+            system_prompt: str = None,
             model: str = "claude-haiku-4-5-20251001"
-            ) -> str:
-        
-        
+            ):
+
+        if self.provider == "bedrock":
+            model = BEDROCK_MODEL_MAP.get(model, model)
+
         params = {
             "model": model,
             "max_tokens": 8096,
@@ -39,6 +46,4 @@ class Executor:
         if system_prompt:
             params["system"] = system_prompt
 
-        # chamar a API do Claude e retorna apenas texto'
-        response = self.client.messages.create(**params)
-        return response
+        return self.client.messages.create(**params)
