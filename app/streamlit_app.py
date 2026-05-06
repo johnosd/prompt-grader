@@ -20,15 +20,13 @@ if provider == "anthropic":
         placeholder="sk-ant-...",
         help="Usada apenas nesta sessão. Nunca é salva ou compartilhada."
     )
-    aws_access_key = aws_secret_key = aws_region = None
+    bedrock_api_key = aws_region = None
 else:
     api_key = None
-    col_aws1, col_aws2, col_aws3 = st.columns(3)
-    with col_aws1:
-        aws_access_key = st.text_input("AWS Access Key ID", type="password")
-    with col_aws2:
-        aws_secret_key = st.text_input("AWS Secret Access Key", type="password")
-    with col_aws3:
+    col_b1, col_b2 = st.columns([3, 1])
+    with col_b1:
+        bedrock_api_key = st.text_input("🔑 Bedrock API Key", type="password")
+    with col_b2:
         aws_region = st.text_input("Região", value="us-east-1")
 
 user_message = st.text_area(
@@ -57,15 +55,15 @@ if st.button("💬 Gerar Perguntas"):
     if provider == "anthropic" and not api_key:
         st.error("Insira sua Anthropic API Key para continuar.")
         st.stop()
-    if provider == "bedrock" and not (aws_access_key and aws_secret_key):
-        st.error("Insira as credenciais AWS para continuar.")
+    if provider == "bedrock" and not bedrock_api_key:
+        st.error("Insira sua Bedrock API Key para continuar.")
         st.stop()
     if not user_message.strip():
         st.error("Digite um prompt antes de gerar perguntas.")
         st.stop()
 
     with st.spinner("Gerando perguntas..."):
-        interviewer = Interviewer(api_key=api_key, provider=provider, aws_access_key=aws_access_key, aws_secret_key=aws_secret_key, aws_region=aws_region)
+        interviewer = Interviewer(api_key=api_key, provider=provider, bedrock_api_key=bedrock_api_key, aws_region=aws_region)
         st.session_state.questions = interviewer.generate_questions(user_message, depth=depth)
 
 # --- STEP 2: RESPONDER PERGUNTAS ---
@@ -84,8 +82,8 @@ if st.session_state.get("questions"):
         if provider == "anthropic" and not api_key:
             st.error("Insira sua Anthropic API Key para continuar.")
             st.stop()
-        if provider == "bedrock" and not (aws_access_key and aws_secret_key):
-            st.error("Insira as credenciais AWS para continuar.")
+        if provider == "bedrock" and not bedrock_api_key:
+            st.error("Insira sua Bedrock API Key para continuar.")
             st.stop()
 
         criterios = [c.strip() for c in criterios_text.split("\n") if c.strip()]
@@ -96,7 +94,7 @@ if st.session_state.get("questions"):
             "criteria": criterios
         }
 
-        grader = Grader(api_key=api_key, provider=provider, aws_access_key=aws_access_key, aws_secret_key=aws_secret_key, aws_region=aws_region)
+        grader = Grader(api_key=api_key, provider=provider, bedrock_api_key=bedrock_api_key, aws_region=aws_region)
         historico = []
         status = st.empty()
         status.info("⏳ Rodando iteração 1...")

@@ -10,13 +10,12 @@ SYSTEM_PROMPT = """
         Retorne APENAS JSON válido. Não use markdown, não use blocos de código, não adicione texto antes ou depois do JSON.
     """
 class Evaluator:
-    def __init__(self, api_key: str = None, provider: str = "anthropic", aws_access_key: str = None, aws_secret_key: str = None, aws_region: str = None):
+    def __init__(self, api_key: str = None, provider: str = "anthropic", bedrock_api_key: str = None, aws_region: str = None):
         self.system_prompt = SYSTEM_PROMPT
         self.model = "claude-sonnet-4-6"
         self.api_key = api_key
         self.provider = provider
-        self.aws_access_key = aws_access_key
-        self.aws_secret_key = aws_secret_key
+        self.bedrock_api_key = bedrock_api_key
         self.aws_region = aws_region
         
 
@@ -64,7 +63,7 @@ class Evaluator:
             criteria
             )
         
-        executor = Executor(self.api_key, provider=self.provider, aws_access_key=self.aws_access_key, aws_secret_key=self.aws_secret_key, aws_region=self.aws_region)
+        executor = Executor(self.api_key, provider=self.provider, bedrock_api_key=self.bedrock_api_key, aws_region=self.aws_region)
         messages = []
         executor.add_user_message(messages, prompt_evaluation)
         evaluation = executor.execute_prompt(

@@ -18,17 +18,14 @@ class Executor:
             self,
             api_key: str = None,
             provider: str = "anthropic",
-            aws_access_key: str = None,
-            aws_secret_key: str = None,
+            bedrock_api_key: str = None,
             aws_region: str = None,
     ):
         self.provider = provider
         if provider == "bedrock":
-            self.client = anthropic.AnthropicBedrock(
-                aws_access_key=aws_access_key,
-                aws_secret_key=aws_secret_key,
-                aws_region=aws_region,
-            )
+            if bedrock_api_key:
+                os.environ["AWS_BEARER_TOKEN_BEDROCK"] = bedrock_api_key
+            self.client = anthropic.AnthropicBedrock(aws_region=aws_region)
         else:
             self.client = anthropic.Anthropic(api_key=api_key)
 
