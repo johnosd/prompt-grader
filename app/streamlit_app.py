@@ -73,24 +73,28 @@ if st.session_state.get("questions"):
             "criteria": criterios
         }
 
-        with st.spinner("Rodando Grader..."):
-            grader = Grader(api_key=api_key)
-            historico = grader.run_grader(use_json, max_iterations=max_iterations)
+        grader = Grader(api_key=api_key)
+        historico = []
+        status = st.empty()
+        status.info("⏳ Rodando iteração 1...")
 
-        st.success(f"Concluído em {len(historico)} iteração(ões)")
-
-        for h in historico:
-            score = h["score"]
+        for entry in grader.run_grader(use_json, max_iterations=max_iterations):
+            status.info(f"⏳ Rodando iteração {entry['iteracao'] + 1} de {max_iterations}...")
+            historico.append(entry)
+            score = entry["score"]
             emoji = "✅" if score >= 8 else "⚠️"
 
-            with st.expander(f"{emoji} Iteração {h['iteracao']} — Score: {score}/10"):
+            with st.expander(f"{emoji} Iteração {entry['iteracao']} — Score: {score}/10", expanded=True):
                 tab1, tab2, tab3 = st.tabs(["System Prompt", "Resposta", "Avaliação"])
 
                 with tab1:
-                    st.code(h["system_prompt"], language="text")
+                    st.code(entry["system_prompt"], language="text")
 
                 with tab2:
-                    st.markdown(h["resposta"])
+                    st.markdown(entry["resposta"])
 
                 with tab3:
-                    st.json(h.get("evaluation", {}))
+                    st.json(entry.get("evaluation", {}))
+
+        status.empty()
+        st.success(f"Concluído em {len(historico)} iteração(ões)")
