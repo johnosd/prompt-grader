@@ -32,7 +32,7 @@ class Executor:
         
         params = {
             "model": model,
-            "max_tokens": 1024,
+            "max_tokens": 8096,
             "messages": messages,
         }
 
