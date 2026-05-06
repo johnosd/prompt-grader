@@ -12,10 +12,32 @@ This project applies that pattern in a loop: evaluate → diagnose → rewrite �
 
 ## How it works
 
+### Context Interview
+
+Before the grading loop starts, an optional **Interviewer** step enriches the user prompt by asking clarifying questions. The user answers them in the UI, and a **Context Builder** merges the original prompt with the answers into a single, richer input for the grader.
+
+```
+user_prompt + depth level
+      │
+      ▼
+  Interviewer ── generates clarifying questions (minimal / medium / maximum)
+      │
+      ▼
+  User answers questions
+      │
+      ▼
+  Context Builder ── enriched_prompt
+      │
+      ▼
+  Grading loop (below)
+```
+
+### Grading loop
+
 The key design decision is that the **system prompt stays fixed** across iterations. What changes is the **user prompt** — the Improver rewrites it to be more explicit, structured, and constraint-rich so that the same agent produces better responses without modifying its core instructions.
 
 ```
-user_prompt (evolves each iteration)
+enriched_prompt (evolves each iteration)
       │
       ▼
   Executor ── system_prompt (fixed)
@@ -61,7 +83,10 @@ echo "ANTHROPIC_API_KEY=your-key-here" > .env
 streamlit run app/streamlit_app.py
 ```
 
-Fill in the user message, one evaluation criterion per line, and the number of iterations. Click **Rodar Grader** to start.
+1. Enter your prompt and evaluation criteria (one per line)
+2. Choose the interview depth (`minimal` / `medium` / `maximum`) and click **Gerar Perguntas**
+3. Answer the clarifying questions that appear
+4. Click **Rodar Grader** — the grader runs with the enriched context
 
 ### Deploy on Streamlit Community Cloud
 
@@ -116,10 +141,12 @@ Tests run with `-v -s` by default (configured in `pytest.ini`), so `print()` out
 ```
 app/
 ├── src/
-│   ├── executor.py    # Claude API wrapper
-│   ├── evaluator.py   # Scores a response against criteria
-│   ├── improver.py    # Rewrites the system prompt from evaluation feedback
-│   └── grader.py      # Orchestrates the loop
+│   ├── executor.py         # Claude API wrapper
+│   ├── evaluator.py        # Scores a response against criteria
+│   ├── improver.py         # Rewrites the prompt from evaluation feedback
+│   ├── grader.py           # Orchestrates the grading loop
+│   ├── interviewer.py      # Generates clarifying questions by depth level
+│   └── context_builder.py  # Merges user prompt + interview answers
 ├── tests/
 │   ├── data/
 │   │   ├── use_cases.json          # Example inputs
@@ -127,6 +154,7 @@ app/
 │   ├── test_executor.py
 │   ├── test_evaluator.py
 │   ├── test_improver.py
-│   └── test_grader.py
+│   ├── test_grader.py
+│   └── test_interviewer.py
 └── streamlit_app.py
 ```
