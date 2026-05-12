@@ -10,16 +10,19 @@ def copy_markdown_button(text: str) -> None:
     escaped = json.dumps(text)
     components.html(
         f"""
+        <textarea id="copyArea" style="position:absolute;left:-9999px;"></textarea>
+        <script>document.getElementById('copyArea').value = {escaped};</script>
         <button id="copyBtn" onclick="
-            navigator.clipboard.writeText({escaped}).then(function() {{
-                var btn = document.getElementById('copyBtn');
-                btn.textContent = '✅ Copiado!';
-                btn.style.background = '#28a745';
-                setTimeout(function() {{
-                    btn.textContent = '📋 Copiar Markdown';
-                    btn.style.background = '#6c757d';
-                }}, 2000);
-            }});
+            var el = document.getElementById('copyArea');
+            el.select();
+            el.setSelectionRange(0, 99999);
+            document.execCommand('copy');
+            this.textContent = '✅ Copiado!';
+            this.style.background = '#28a745';
+            setTimeout(function() {{
+                document.getElementById('copyBtn').textContent = '📋 Copiar Markdown';
+                document.getElementById('copyBtn').style.background = '#6c757d';
+            }}, 2000);
         " style="background:#6c757d;color:white;border:none;padding:6px 14px;
                  border-radius:4px;cursor:pointer;font-size:14px;">
             📋 Copiar Markdown
