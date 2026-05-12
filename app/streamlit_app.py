@@ -1,7 +1,32 @@
+import json
 import streamlit as st
+import streamlit.components.v1 as components
 from src.grader import Grader
 from src.interviewer import Interviewer
 from src.context_builder import build_context
+
+
+def copy_markdown_button(text: str) -> None:
+    escaped = json.dumps(text)
+    components.html(
+        f"""
+        <button id="copyBtn" onclick="
+            navigator.clipboard.writeText({escaped}).then(function() {{
+                var btn = document.getElementById('copyBtn');
+                btn.textContent = '✅ Copiado!';
+                btn.style.background = '#28a745';
+                setTimeout(function() {{
+                    btn.textContent = '📋 Copiar Markdown';
+                    btn.style.background = '#6c757d';
+                }}, 2000);
+            }});
+        " style="background:#6c757d;color:white;border:none;padding:6px 14px;
+                 border-radius:4px;cursor:pointer;font-size:14px;">
+            📋 Copiar Markdown
+        </button>
+        """,
+        height=45,
+    )
 
 st.title("🎯 Prompt Grader")
 
@@ -109,7 +134,8 @@ if st.session_state.get("questions"):
                 tab1, tab2, tab3 = st.tabs(["System Prompt", "Resposta", "Avaliação"])
 
                 with tab1:
-                    st.code(entry["system_prompt"], language="text")
+                    copy_markdown_button(entry["system_prompt"])
+                    st.code(entry["system_prompt"], language="markdown")
 
                 with tab2:
                     st.markdown(entry["resposta"])
