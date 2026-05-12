@@ -134,10 +134,10 @@ if st.session_state.get("questions"):
                 tab1, tab2, tab3 = st.tabs(["System Prompt", "Resposta", "Avaliação"])
 
                 with tab1:
-                    copy_markdown_button(entry["system_prompt"])
                     st.code(entry["system_prompt"], language="markdown")
 
                 with tab2:
+                    copy_markdown_button(entry["resposta"])
                     st.markdown(entry["resposta"])
 
                 with tab3:
